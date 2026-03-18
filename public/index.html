@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Extractor</title>
+</head>
+<body>
+
+<h2>🎥 Vercel Video Extractor</h2>
+
+<input id="batchId" placeholder="Enter Batch ID">
+<button onclick="fetchData()">Get Videos</button>
+
+<ul id="list"></ul>
+
+<script>
+async function fetchData() {
+  const batchId = document.getElementById("batchId").value;
+
+  const res = await fetch(`/api/scrape?batchId=${batchId}`);
+  const data = await res.json();
+
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  data.videos.forEach(v => {
+    const li = document.createElement("li");
+
+    li.innerHTML = `
+      <a href="/api/download?url=${encodeURIComponent(v)}" target="_blank">
+        Download Video
+      </a>
+    `;
+
+    list.appendChild(li);
+  });
+}
+</script>
+
+</body>
+</html>
