@@ -11,27 +11,20 @@ export default async function handler(req, res) {
     const response = await fetch(url, {
       headers: {
         "User-Agent": "Mozilla/5.0",
-        "Accept": "application/json",
-        "Referer": "https://asmultiversepw.pages.dev/",
-        "Origin": "https://asmultiversepw.pages.dev"
+        "Accept": "application/json"
       }
     });
 
     const data = await response.json();
 
     const videos = [];
-    const subjects = data.data || [];
 
-    subjects.forEach(item => {
+    (data.data || []).forEach(item => {
       const v = item.videoUrl || item.video || item.url;
       if (v) videos.push(v);
     });
 
-    res.status(200).json({
-      total: subjects.length,
-      videos,
-      data: subjects
-    });
+    res.status(200).json({ videos });
 
   } catch (err) {
     res.status(500).json({ error: err.message });
